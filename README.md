@@ -1,36 +1,166 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 BabyPoint
 
-## Getting Started
+A modern web app to track foosball matches at work, manage teams, and generate fun statistics with a credible Elo ranking system.
 
-First, run the development server:
+## 🚀 Tech Stack
 
+- **Next.js 16** - React Server Components, App Router, Server Actions
+- **React 19** - Modern React with RSC architecture
+- **TypeScript** - Full type safety
+- **Prisma** - Type-safe database ORM
+- **PostgreSQL** - Relational database
+- **Tailwind CSS** - Utility-first styling
+- **shadcn/ui** - Beautiful UI components
+- **JWT** - Cookie-based authentication
+
+## ✨ Features
+
+### 🎮 Match Management
+- Create **1v1 or 2v2** matches
+- Select players and define Team A/B
+- Enter scores in **real-time** with live updates
+- Complete match history with filters
+
+### 🏆 Ranking System
+- **Elo rating** algorithm (adapted for 1v1 and 2v2)
+- Real-time leaderboard
+- Automatic updates after each match
+- Separate rankings per league
+
+### 📊 Player Statistics
+- Win rate and match count
+- Current and record win streaks
+- Favorite teammates with performance stats
+- Rival opponents and head-to-head history
+- Elo rating evolution over time
+
+### 🏢 League System
+- Create and join multiple leagues
+- QR code invitations for easy sharing
+- Per-league rankings and statistics
+- Admin controls for league management
+
+## 🛠️ Getting Started
+
+### Prerequisites
+- Node.js 18+
+- PostgreSQL database
+
+### Installation
+
+1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd babypoint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edit `.env` with your database credentials:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/babypoint"
+JWT_SECRET="your-secret-key"
+```
 
-## Learn More
+4. Start the database (using Docker)
+```bash
+npm run docker:up
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. Run database migrations
+```bash
+npm run db:push
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+6. (Optional) Seed the database with test data
+```bash
+npm run db:seed
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+7. Start the development server
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📦 Available Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run db:push` - Push Prisma schema to database
+- `npm run db:migrate` - Create a new migration
+- `npm run db:studio` - Open Prisma Studio (database GUI)
+- `npm run db:seed` - Seed database with test data
+- `npm run docker:up` - Start PostgreSQL container
+- `npm run docker:down` - Stop PostgreSQL container
+
+## ��️ Project Structure
+
+```
+babypoint/
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # Authentication pages (login, signup)
+│   ├── (dashboard)/       # Protected dashboard pages
+│   ├── leagues/           # League pages
+│   ├── players/           # Player pages
+│   ├── actions/           # Server Actions
+│   └── api/               # API routes (SSE, webhooks)
+├── components/            # React components
+│   ├── layouts/          # Layout components
+│   ├── league/           # League-specific components
+│   ├── match/            # Match-specific components
+│   └── ui/               # shadcn/ui components
+├── lib/                   # Utility libraries
+│   ├── auth.ts           # Authentication utilities
+│   ├── auth-server.ts    # Server-side auth
+│   ├── elo.ts            # Elo calculation algorithm
+│   └── prisma.ts         # Prisma client
+└── prisma/               # Database schema and migrations
+```
+
+## �� Key Features Explained
+
+### Elo Rating System
+The app uses a modified Elo algorithm that:
+- Adjusts for team matches (2v2) by averaging team ratings
+- Applies a K-factor of 32 for standard volatility
+- Starts new players at 1000 rating
+- Updates ratings immediately after each match
+
+### Real-time Match Updates
+Matches support live score updates using Server-Sent Events (SSE):
+- Players can update scores in real-time
+- All viewers see updates instantly
+- No polling or websockets needed
+
+### League System
+- Each league has independent rankings
+- Players can join multiple leagues
+- QR codes for easy mobile invitations
+- League admins can manage members
+
+## 🔒 Authentication
+
+The app uses JWT-based authentication with:
+- Secure HTTP-only cookies
+- Server-side token verification
+- Password hashing with bcrypt
+- Protected routes using middleware
+
+## 📱 Responsive Design
+
+Fully responsive interface that works on:
+- Desktop browsers
+- Tablets
+- Mobile phones
