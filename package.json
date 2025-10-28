@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && next build && npm run postbuild",
+    "postbuild": "bash scripts/copy-prisma-engines.sh",
     "start": "next start",
     "lint": "eslint",
     "db:push": "prisma db push",
